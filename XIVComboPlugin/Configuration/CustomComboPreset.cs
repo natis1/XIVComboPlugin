@@ -9,9 +9,6 @@ namespace XIVComboPlugin
         None = 0,
 
         // DRAGOON
-        [CustomComboInfo("Jump + Mirage Dive", "Replace (High) Jump with Mirage Dive when Dive Ready", 22)]
-        DragoonJumpFeature = 1L << 44,
-
         [CustomComboInfo("Coerthan Torment Combo", "Replace Coerthan Torment with its combo chain", 22)]
         DragoonCoerthanTormentCombo = 1L << 0,
 
@@ -35,7 +32,7 @@ namespace XIVComboPlugin
         [CustomComboInfo("Prominence Combo", "Replace Prominence with its combo chain", 19)]
         PaladinProminenceCombo = 1L << 7,
 
-        [CustomComboInfo("Requiescat Confiteor", "Replace Requiescat with Confiteor while under the effect of Requiescat", 19)]
+        [CustomComboInfo("Requiescat/Imperator Confiteor", "Replace Requiescat/Imperator with Confiteor while under the effect of Requiescat", 19)]
         PaladinRequiescatCombo = 1L << 55,
 
         // WARRIOR
@@ -47,9 +44,6 @@ namespace XIVComboPlugin
 
         [CustomComboInfo("Mythril Tempest Combo", "Replace Mythril Tempest with its combo chain", 21)]
         WarriorMythrilTempestCombo = 1L << 10,
-
-        [CustomComboInfo("IR to Primal Rend", "Replace Inner Release with Primal Rend when Primal Rend Ready", 21)]
-        WarriorIRCombo = 1L << 63,
 
         // SAMURAI
         [CustomComboInfo("Yukikaze Combo", "Replace Yukikaze with its combo chain", 34)]
@@ -69,10 +63,6 @@ namespace XIVComboPlugin
 
         [CustomComboInfo("Iaijutsu into Tsubame", "Replace Iaijutsu with Tsubame after using an Iaijutsu", 34)]
         SamuraiTsubameCombo = 1L << 56,
-
-        [CustomComboInfo("Ogi Namikiri Combo", "Replace Ikishoten with Ogi Namiki and Kaeshi Namikiri when appropriate", 34)]
-        SamuraiOgiCombo = 1L << 62,
-
 
         // NINJA
         [CustomComboInfo("Armor Crush Combo", "Replace Armor Crush with its combo chain", 30)]
@@ -96,6 +86,9 @@ namespace XIVComboPlugin
 
         [CustomComboInfo("Demon Slaughter Combo", "Replace Demon Slaughter with its combo chain", 37)]
         GunbreakerDemonSlaughterCombo = 1L << 22,
+        
+        [CustomComboInfo("Fated Circle Continuation", "Put Continuation moves on Fated Circle when appropriate", 37)]
+        GunbreakerFatedCircleCont = 1L << 54,
 
         // MACHINIST
         [CustomComboInfo("(Heated) Shot Combo", "Replace either form of Clean Shot with its combo chain", 31)]
@@ -108,28 +101,25 @@ namespace XIVComboPlugin
         MachinistOverheatFeature = 1L << 47,
 
         // BLACK MAGE
-        [CustomComboInfo("Enochian Stance Switcher", "Change Fire 4 and Blizzard 4 to the appropriate element depending on stance, as well as Flare and Freeze", 25)]
+        [CustomComboInfo("Enochian Stance Switcher", "Change Fire 4, Blizzard 4, Flare, and Freeze to the appropriate element depending on stance", 25)]
         BlackEnochianFeature = 1L << 25,
 
-        [CustomComboInfo("(Between the) Ley Lines", "Change Ley Lines into BTL when Ley Lines is active", 25)]
-        BlackLeyLines = 1L << 28,
-
         // ASTROLOGIAN
-        [CustomComboInfo("Draw on Play", "Play turns into Draw when no card is drawn, as well as the usual Play behavior", 33)]
+        [CustomComboInfo("Astral/Umbral Draw on Play 1/2/3", "Play actions turn into Draw actions after playing a card, while keeping the the usual Play behavior", 33)]
         AstrologianCardsOnDrawFeature = 1L << 27,
 
         // SUMMONER
 
-        [CustomComboInfo("ED Fester", "Change Fester into Energy Drain when out of Aetherflow stacks", 27)]
+        [CustomComboInfo("ED Fester/Necrotize", "Change Fester/Necrotize into Energy Drain when out of Aetherflow stacks", 27)]
         SummonerEDFesterCombo = 1L << 39,
 
         [CustomComboInfo("ES Painflare", "Change Painflare into Energy Syphon when out of Aetherflow stacks", 27)]
         SummonerESPainflareCombo = 1L << 40,
         
+        [CustomComboInfo("Solar Bahamut Lux", "Change Summon Solar Bahamut into Lux Solaris after summoning", 27)]
+        SummonerSolarBahamutLuxSolaris = 1L << 28,
+        
         // SCHOLAR
-        [CustomComboInfo("Seraph Fey Blessing/Consolation", "Change Fey Blessing into Consolation when Seraph is out", 28)]
-        ScholarSeraphConsolationFeature = 1L << 29,
-
         [CustomComboInfo("ED Aetherflow", "Change Energy Drain into Aetherflow when you have no more Aetherflow stacks", 28)]
         ScholarEnergyDrainFeature = 1L << 37,
 
@@ -146,6 +136,9 @@ namespace XIVComboPlugin
         [CustomComboInfo("Devilment into Starfall", "Change Devilment into Starfall Dance while under the effect of Flourishing Starfall", 38)]
         DancerDevilmentCombo = 1L << 61,
 
+        [CustomComboInfo("Standard Last Dance", "Change Standard Step into Last Dance when ready", 38)]
+        DancerLastDanceCombo = 1L << 21,
+
         // WHITE MAGE
         [CustomComboInfo("Solace into Misery", "Replaces Afflatus Solace with Afflatus Misery when Misery is ready to be used", 24)]
         WhiteMageSolaceMiseryFeature = 1L << 35,
@@ -157,11 +150,15 @@ namespace XIVComboPlugin
         [CustomComboInfo("Heavy Shot into Straight Shot", "Replaces Heavy Shot/Burst Shot with Straight Shot/Refulgent Arrow when procced", 23)]
         BardStraightShotUpgradeFeature = 1L << 42,
 
-        [CustomComboInfo("Quick Nock into Shadowbite", "Replaces Quick Nock/Ladonsbite with Shadowbite when procced", 23)]
+        [CustomComboInfo("Quick Nock into Shadowbite", "Replaces Quick Nock/Ladonsbite with Wide Volley/Shadowbite when procced", 23)]
         BardAoEUpgradeFeature = 1L << 59,
 
         // MONK
-        // you get nothing, you lose, have a nice day etc
+        [CustomComboInfo("Monk Fury Combo", "Replaces Bootshine, True Strike, and Snap Punch when no Fury charges are available", 20)]
+        MonkFuryCombo = 1L << 43,
+
+        [CustomComboInfo("Perfect Balance on Masterful Blitz", "Replaces Masterful Blitz with Perfect Balance when no Blitz moves are available", 20)]
+        MonkPerfectBlitz = 1L << 44,
 
         // RED MAGE
         [CustomComboInfo("Red Mage AoE Combo", "Replaces Veraero/thunder 2 with Impact when Dualcast or Swiftcast are active", 35)]
@@ -170,28 +167,50 @@ namespace XIVComboPlugin
         [CustomComboInfo("Redoublement combo", "Replaces Redoublement with its combo chain, following enchantment rules", 35)]
         RedMageMeleeCombo = 1L << 49,
 
-        [CustomComboInfo("Verproc into Jolt", "Replaces Verstone/Verfire with Jolt/Scorch when no proc is available.", 35)]
+        [CustomComboInfo("Verproc into Jolt", "Replaces Verstone/Verfire with Jolt/Scorch when no proc is available", 35)]
         RedMageVerprocCombo = 1L << 53,
 
         // REAPER
-        [CustomComboInfo("Slice Combo", "Replace Slice with its combo chain.", 39)]
+        [CustomComboInfo("Slice Combo", "Replace Slice with its combo chain", 39)]
         ReaperSliceCombo = 1L << 16,
 
-        [CustomComboInfo("Scythe Combo", "Replace Spinning Scythe with its combo chain.", 39)]
+        [CustomComboInfo("Scythe Combo", "Replace Spinning Scythe with its combo chain", 39)]
         ReaperScytheCombo = 1L << 57,
 
-        [CustomComboInfo("Double Regress", "Regress always replaces both Hell's Egress and Hell's Ingress.", 39)]
+        [CustomComboInfo("Double Regress", "Regress always replaces both Hell's Egress and Hell's Ingress", 39)]
         ReaperRegressFeature = 1L << 58,
 
-        [CustomComboInfo("Enshroud Combo", "Replace Enshroud with Communio while you are Enshrouded.", 39)]
+        [CustomComboInfo("Enshroud Combo", "Replace Enshroud with Communio while you are Enshrouded", 39)]
         ReaperEnshroudCombo = 1L << 26,
 
-        [CustomComboInfo("Arcane Circle Combo", "Replace Arcane Circle with Plentiful Harvest while you have Immortal Sacrifice.", 39)]
+        [CustomComboInfo("Arcane Circle Combo", "Replace Arcane Circle with Plentiful Harvest while you have Immortal Sacrifice", 39)]
         ReaperArcaneFeature = 1L << 30,
 
         // FISHER
         [CustomComboInfo("Cast into Hook", "Replace Cast with Hook while you are currently fishing.", 18)]
-        FisherHooking = 1L << 5,
+        FisherHooking = 1L << 62,
+        //PICTOMANCER
+        [CustomComboInfo("Additive to Subtractive Combo","Replace Additive combo with Subtractive combo when Subtractive Pallet is active",42)]
+        PictoSubtractivePallet = 1L << 31,
+
+        [CustomComboInfo("Motifs and Muses", "Replace Motifs with their relevant Muses", 42)]
+        PictoMotifMuseFeature = 1L << 34,
+
+        [CustomComboInfo("Landscape and Steel follow-ups", "Additionally replace Landscape Motif with Star Prism and Weapon Motif with Hammer Stamp when appropriate", 42)]
+        PictoMuseCombo = 1L << 38,
+
+        [CustomComboInfo("Holy White to Comet Black", "Replace Holy in White with Comet in Black when Monochrome Tones is active", 42)]
+        PictoHolyWhiteCombo = 1L << 5,
+        
+        //Viper
+        [CustomComboInfo("Death Rattle Finisher", "Replace Steel Fangs/Dread Fangs with Death Rattle when available", 41)]
+        ViperDeathRattleCombo = 1L << 46,
+        
+        [CustomComboInfo("Last Lash Finisher", "Replace Steel Maw/Dread Maw with Last Lash when available", 41)]
+        ViperLastLashCombo = 1L << 50,
+        
+        [CustomComboInfo("Generational Legacy", "Legacy moves replace Generation moves when usable", 41)]
+        ViperLegacyCombo = 1L << 51,
     }
 
     public class CustomComboInfoAttribute : Attribute

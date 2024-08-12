@@ -15,8 +15,16 @@
             BrandOfPurgatory = 16515,
             FountainOfFire = 16514,
             Fester = 181,
+            Necrotize = 36990,
             EnergyDrain = 16508,
             Painflare = 3578,
-            EnergySyphon = 16510;
+            EnergySyphon = 16510,
+            LuxSolaris = 36997,
+            SummonSolarBahamut = 36992;
+        public static class Buffs
+        {
+            public const ushort
+                RefulgentLux = 3874;
+        }
     }
 }

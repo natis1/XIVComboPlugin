@@ -18,10 +18,15 @@
             OgiNamikiri = 25781,
             Ikishoten = 16482,
             KaeshiNamikiri = 25782,
-            Fuko = 25780;
+            Fuko = 25780,
+            Gyofu = 36963;
 
         public const ushort
             BuffOgiNamikiriReady = 2959,
-            BuffMeikyoShisui = 1233;
+            BuffMeikyoShisui = 1233,
+            BuffTsubameReady = 3852,
+            BuffTsubame1 = 4216,
+            BuffTsubame2 = 4217,
+            BuffTsubame3 = 4218;
     }
 }

@@ -6,7 +6,7 @@ using System.Numerics;
 using ImGuiNET;
 using Dalamud.Game;
 using Dalamud.Utility;
-using System.Diagnostics;
+using Dalamud.IoC;
 using Dalamud.Plugin.Services;
 using Dalamud.Interface.Utility;
 using Dalamud.Game.ClientState.Conditions;
@@ -17,33 +17,23 @@ namespace XIVComboPlugin
     {
         public string Name => "XIV Combo Plugin";
 
+        [PluginService] internal static ICommandManager CommandManager { get; private set; } = null!;
+        [PluginService] internal static IDalamudPluginInterface PluginInterface { get; private set; } = null!;
+        [PluginService] internal static ISigScanner SigScanner { get; private set; } = null!;
+        [PluginService] internal static IClientState ClientState { get; private set; } = null!;
+        [PluginService] internal static IChatGui ChatGui{ get; private set; } = null!;
+        [PluginService] internal static IJobGauges JobGauges { get; private set; } = null!;
+        [PluginService] internal static IGameInteropProvider HookProvider{ get; private set; } = null!;
+        [PluginService] internal static IPluginLog PluginLog { get; private set; } = null!;
+        [PluginService] internal static IDataManager DataManager { get; private set; } = null!;
+
         public XIVComboConfiguration Configuration;
 
         private IconReplacer iconReplacer;
         private CustomComboPreset[] orderedByClassJob;
 
-        private ICommandManager CommandManager { get; init; }
-        private DalamudPluginInterface PluginInterface { get; init; }
-        private ISigScanner TargetModuleScanner { get; init; }
-        private IClientState ClientState { get; init; }
-        private IChatGui ChatGui { get; init; }
-        private IJobGauges JobGauges { get; init; }
-        private IGameInteropProvider HookProvider { get; init; }
-        private IPluginLog PluginLog { get; init; }
-        private ICondition Condition { get; init; } = null!;
-
-        public XIVComboPlugin(IClientState clientState, ICommandManager commandManager, IDataManager manager, DalamudPluginInterface pluginInterface, ISigScanner sigScanner, IJobGauges jobGauges, IChatGui chatGui, IGameInteropProvider gameInteropProvider, IPluginLog pluginLog, ICondition condition)
+        public XIVComboPlugin()
         {
-            ClientState = clientState;
-            CommandManager = commandManager;
-            PluginInterface =  pluginInterface;
-            TargetModuleScanner = sigScanner;
-            JobGauges = jobGauges;
-            HookProvider = gameInteropProvider;
-            ChatGui = chatGui;
-            PluginLog = pluginLog;
-            Condition = condition;
-
             CommandManager.AddHandler("/pcombo", new CommandInfo(OnCommandDebugCombo)
             {
                 HelpMessage = "Open a window to edit custom combo settings.",
@@ -56,11 +46,12 @@ namespace XIVComboPlugin
                 Configuration.Version = 4;
             }
 
-            this.iconReplacer = new IconReplacer(TargetModuleScanner, ClientState, manager, this.Configuration, HookProvider, JobGauges, PluginLog, Condition);
+            this.iconReplacer = new IconReplacer(SigScanner, ClientState, DataManager, this.Configuration, HookProvider, JobGauges, PluginLog);
 
             this.iconReplacer.Enable();
 
             PluginInterface.UiBuilder.OpenConfigUi += () => isImguiComboSetupOpen = true;
+            PluginInterface.UiBuilder.OpenMainUi += () => isImguiComboSetupOpen = true;
             PluginInterface.UiBuilder.Draw += UiBuilder_OnBuildUi;
 
             var values = Enum.GetValues(typeof(CustomComboPreset)).Cast<CustomComboPreset>();
@@ -115,6 +106,8 @@ namespace XIVComboPlugin
                 case 38: return "Dancer";
                 case 39: return "Reaper";
                 case 40: return "Sage";
+                case 41: return "Viper";
+                case 42: return "Pictomancer";
             }
         }
 
@@ -173,19 +166,6 @@ namespace XIVComboPlugin
                         
                     }
                     
-                }
-            }
-
-            if (ImGui.CollapsingHeader("Monk"))
-            {
-                ImGui.Text("Not happening.");
-                if (ImGui.Button("External link for more detailed explanation (for real this time)"))
-                {
-                    Process.Start(new ProcessStartInfo
-                    {
-                        FileName = "https://github.com/attickdoor/XIVComboPlugin/blob/master/why-no-monk.md",
-                        UseShellExecute = true
-                    });
                 }
             }
 

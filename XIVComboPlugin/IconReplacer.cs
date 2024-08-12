@@ -101,6 +101,9 @@ namespace XIVComboPlugin
         /// </summary>
         private ulong GetIconDetour(byte self, uint actionID)
         {
+            // early exit
+            //return iconHook.Original(self, actionID);
+
             if (clientState.LocalPlayer == null) return iconHook.Original(self, actionID);
             // Last resort. For some reason GetIcon fires after leaving the lobby but before ClientState.Login
             if (lastComboMove == IntPtr.Zero)
@@ -189,10 +192,28 @@ namespace XIVComboPlugin
             if (Configuration.ComboPresets.HasFlag(CustomComboPreset.PaladinRoyalAuthorityCombo))
                 if (actionID == PLD.RoyalAuthority || actionID == PLD.RageOfHalone)
                 {
-                    if (lastMove == PLD.FastBlade && level >= 4)
-                        return PLD.RiotBlade;
-                    if (lastMove == PLD.RiotBlade && level >= 26)
-                        return iconHook.Original(self, PLD.RageOfHalone);
+                    // Atonement auto advance
+                    if (SearchBuffArray(PLD.BuffAtonement)) {
+                        return PLD.Atonement;
+                    } else if (SearchBuffArray(PLD.BuffAtonement2)) {
+                        return PLD.Atonement2;
+                    } else if (SearchBuffArray(PLD.BuffAtonement3)) {
+                        return PLD.Atonement3;
+                    }
+
+                    if (comboTime > 0)
+                    {
+                        if (lastMove == PLD.FastBlade && level >= 4)
+                            return PLD.RiotBlade;
+                        if (lastMove == PLD.RiotBlade)
+                        {
+                            if (level >= 60)
+                                return PLD.RoyalAuthority;
+                            if (level >= 26)
+                                return PLD.RageOfHalone;
+                        }
+                    }
+
                     return PLD.FastBlade;
                 }
 
@@ -601,6 +622,15 @@ namespace XIVComboPlugin
                 }
             }
 
+            // Ley Lines and BTL
+            if (Configuration.ComboPresets.HasFlag(CustomComboPreset.BlackLeyLines))
+                if (actionID == BLM.LeyLines)
+                {
+                    if (SearchBuffArray(BLM.BuffLeyLines) && level >= 62)
+                        return BLM.BTL;
+                    return BLM.LeyLines;
+                }
+
             // SUMMONER
             // Change Fester/Necrotize into Energy Drain
             if (Configuration.ComboPresets.HasFlag(CustomComboPreset.SummonerEDFesterCombo))
@@ -817,6 +847,7 @@ namespace XIVComboPlugin
             if (Configuration.ComboPresets.HasFlag(CustomComboPreset.RedMageMeleeCombo))
                 if (actionID == RDM.Redoublement)
                 {
+<<<<<<< HEAD
                     if ((lastMove == RDM.Riposte) && level >= 35)
                         return iconHook.Original(self, RDM.Zwerchhau);
 
@@ -824,6 +855,26 @@ namespace XIVComboPlugin
                         return iconHook.Original(self, RDM.Redoublement);
 
                     return iconHook.Original(self, RDM.Riposte);
+=======
+                    var gauge = JobGauges.Get<RDMGauge>();
+                    if ((lastMove == RDM.Riposte || lastMove == RDM.ERiposte) && level >= 35)
+                    {
+                        if ((gauge.BlackMana >= 15 && gauge.WhiteMana >= 15) || SearchBuffArray(RDM.BuffManafication))
+                            return RDM.EZwerchhau;
+                        return RDM.Zwerchhau;
+                    }
+
+                    if (lastMove == RDM.Zwerchhau && level >= 50)
+                    {
+                        if ((gauge.BlackMana >= 15 && gauge.WhiteMana >= 15) || SearchBuffArray(RDM.BuffManafication))
+                            return RDM.ERedoublement;
+                        return RDM.Redoublement;
+                    }
+
+                    if ((gauge.BlackMana >= 20 && gauge.WhiteMana >= 20) || SearchBuffArray(RDM.BuffManafication))
+                        return RDM.ERiposte;
+                    return RDM.Riposte;
+>>>>>>> 21e3c80 (newest version)
                 }
 
             if (Configuration.ComboPresets.HasFlag(CustomComboPreset.RedMageVerprocCombo))

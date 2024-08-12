@@ -33,6 +33,6 @@
             BuffVerstoneReady = 1235,
             BuffVerfireReady = 1234,
             BuffGrandImpactReady = 3877,
-            BuffMagickedSwordplay = 3875;
+            BuffManafication = 3875;
     }
 }

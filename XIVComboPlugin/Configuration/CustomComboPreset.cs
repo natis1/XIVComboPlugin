@@ -108,6 +108,9 @@ namespace XIVComboPlugin
         [CustomComboInfo("Astral/Umbral Draw on Play 1/2/3", "Play actions turn into Draw actions after playing a card, while keeping the the usual Play behavior", 33)]
         AstrologianCardsOnDrawFeature = 1L << 27,
 
+        [CustomComboInfo("(Between the) Ley Lines", "Change Ley Lines into BTL when Ley Lines is active", 25)]
+        BlackLeyLines = 1L << 28,
+
         // SUMMONER
 
         [CustomComboInfo("ED Fester/Necrotize", "Change Fester/Necrotize into Energy Drain when out of Aetherflow stacks", 27)]

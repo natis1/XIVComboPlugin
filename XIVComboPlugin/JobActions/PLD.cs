@@ -15,10 +15,16 @@
             Imperator = 36921,
             BladeOfFaith = 25748,
             BladeOfTruth = 25749,
-            BladeOfValor = 25750;
+            BladeOfValor = 25750,
+            Atonement = 16460,
+            Atonement2 = 36918,
+            Atonement3 = 36919;
 
         public const ushort
             BuffRequiescat = 1368,
-            BuffBladeOfFaithReady = 3019;
+            BuffBladeOfFaithReady = 3019,
+            BuffAtonement = 1902,
+            BuffAtonement2 = 3827,
+            BuffAtonement3 = 3828;
     }
 }

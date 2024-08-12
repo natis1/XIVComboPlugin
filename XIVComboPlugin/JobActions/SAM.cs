@@ -19,7 +19,9 @@
             Ikishoten = 16482,
             KaeshiNamikiri = 25782,
             Fuko = 25780,
-            Gyofu = 36963;
+            Gyofu = 36963,
+            Shinten = 7490,
+            Kyuten = 7491;
 
         public const ushort
             BuffOgiNamikiriReady = 2959,

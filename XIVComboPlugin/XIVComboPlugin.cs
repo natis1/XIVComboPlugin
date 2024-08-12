@@ -26,6 +26,7 @@ namespace XIVComboPlugin
         [PluginService] internal static IGameInteropProvider HookProvider{ get; private set; } = null!;
         [PluginService] internal static IPluginLog PluginLog { get; private set; } = null!;
         [PluginService] internal static IDataManager DataManager { get; private set; } = null!;
+        [PluginService] internal static ICondition Condition { get; private set; } = null!;
 
         public XIVComboConfiguration Configuration;
 
@@ -46,7 +47,7 @@ namespace XIVComboPlugin
                 Configuration.Version = 4;
             }
 
-            this.iconReplacer = new IconReplacer(SigScanner, ClientState, DataManager, this.Configuration, HookProvider, JobGauges, PluginLog);
+            this.iconReplacer = new IconReplacer(SigScanner, ClientState, DataManager, this.Configuration, HookProvider, JobGauges, PluginLog, Condition);
 
             this.iconReplacer.Enable();
 
@@ -108,6 +109,7 @@ namespace XIVComboPlugin
                 case 40: return "Sage";
                 case 41: return "Viper";
                 case 42: return "Pictomancer";
+                case 43: return "Cheater";
             }
         }
 

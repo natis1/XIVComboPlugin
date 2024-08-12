@@ -19,6 +19,18 @@ namespace XIVComboPlugin.JobActions
             RisingRaptor = 36946,
             PouncingCoeurl = 36947,
             PerfectBalance = 69,
-            MasterfulBlitz = 25764;
+            MasterfulBlitz = 25764,
+            ArmOfTheDestroyer = 62,
+            FourPointFury = 16473,
+            Rockbreaker = 70;
+
+        public const ushort
+            OpoOpo = 107,
+            Raptor = 108,
+            Coeurl = 109,
+            AnyForm = 2513,
+            LeadenFist = 1861,
+            PerfectBalanceBuff = 110;
+
     }
 }

@@ -27,7 +27,7 @@
     <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
   </PropertyGroup>
   <PropertyGroup>
-    <DalamudLibPath>$(appdata)\XIVLauncher\addon\Hooks\dev\</DalamudLibPath>
+    <DalamudLibPath>/home/deck/.xlcore/dalamud/Hooks/dev/</DalamudLibPath>
   </PropertyGroup>
 
   <ItemGroup>

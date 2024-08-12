@@ -7,6 +7,7 @@ using Dalamud.Game.ClientState.JobGauge.Enums;
 using Dalamud.Game.ClientState.JobGauge.Types;
 using Dalamud.Game.ClientState.Conditions;
 using FFXIVClientStructs.FFXIV.Client.Game;
+using FFXIVClientStructs.FFXIV.Client.Game.UI;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Game.Gauge;
 using SerpentCombo = Dalamud.Game.ClientState.JobGauge.Enums.SerpentCombo;
@@ -84,7 +85,6 @@ namespace XIVComboPlugin
 
         // I hate this function. This is the dumbest function to exist in the game. Just return 1.
         // Determines which abilities are allowed to have their icons updated.
-
         private ulong CheckIsIconReplaceableDetour(uint actionID)
         {
             return 1;
@@ -444,7 +444,128 @@ namespace XIVComboPlugin
                     return iconHook.Original(self, MCH.SpreadShot);
                 }
 
-            // BLACK MAGE
+            // BLACK MAGE and other mild qol stuff eg for SAMURAI
+            // ALSO a mnk static rotation
+
+            if (Configuration.ComboPresets.HasFlag(CustomComboPreset.CheaterChanges)) {
+                if (actionID == SAM.Kyuten && level < 62) {
+                    return SAM.Shinten;
+                }
+
+                if (actionID == MNK.TrueStrike) {
+                    if (SearchBuffArray(MNK.PerfectBalanceBuff)) {
+                        var chakra = JobGauges.Get<MNKGauge>().BeastChakra;
+                        if (chakra[1] != BeastChakra.NONE) {
+                            return MNK.SnapPunch;
+                        } else if (chakra[0] != BeastChakra.NONE) {
+                            return MNK.TrueStrike;
+                        }
+                    }
+
+                    if (SearchBuffArray(MNK.Raptor) && level >= 4) {
+                        return MNK.TrueStrike;
+                    } else if (SearchBuffArray(MNK.Coeurl) && level >= 6) {
+                        return MNK.SnapPunch;
+                    }
+                    if (SearchBuffArray(MNK.LeadenFist) || level < 50) {
+                        return MNK.Bootshine;
+                    }
+                    return MNK.DragonKick;
+                }
+
+                if (actionID == MNK.TwinSnakes) {
+                    if (SearchBuffArray(MNK.PerfectBalanceBuff)) {
+                        var chakra = JobGauges.Get<MNKGauge>().BeastChakra;
+                        if (chakra[1] != BeastChakra.NONE) {
+                            return MNK.Demolish;
+                        } else if (chakra[0] != BeastChakra.NONE) {
+                            return MNK.TwinSnakes;
+                        }
+                    }
+
+                    if (SearchBuffArray(MNK.Raptor)) {
+                        if (level < 18) {
+                            return MNK.TrueStrike;
+                        }
+                        return MNK.TwinSnakes;
+                    } else if (SearchBuffArray(MNK.Coeurl)) {
+                        if (level < 30) {
+                            return MNK.SnapPunch;
+                        }
+                        return MNK.Demolish;
+                    } else if (level < 50) {
+                        return MNK.Bootshine;
+                    }
+                    if (SearchBuffArray(MNK.LeadenFist) || level < 50) {
+                        return MNK.Bootshine;
+                    }
+                    return MNK.DragonKick;
+                }
+
+                if (actionID == MNK.MasterfulBlitz) {
+                    if (SearchBuffArray(MNK.PerfectBalanceBuff)) {
+                        if (SearchBuffArray(MNK.LeadenFist) || level < 50) {
+                                return MNK.Bootshine;
+                            }
+                        return MNK.DragonKick;
+                    }
+
+
+                    //return MNK.MasterfulBlitz;
+                }
+
+                if (actionID == MNK.ArmOfTheDestroyer) {
+
+                    if (SearchBuffArray(MNK.PerfectBalanceBuff)) {
+                        if (level >= 60) {
+                            var nadi = JobGauges.Get<MNKGauge>().Nadi;
+                            // we have lunar but not solar
+                            if (((byte)nadi & 6) == 2) {
+                                var chakra = JobGauges.Get<MNKGauge>().BeastChakra;
+                                if (chakra[1] != BeastChakra.NONE) {
+                                    return MNK.FourPointFury;
+                                } else if (chakra[0] != BeastChakra.NONE) {
+                                    return MNK.ArmOfTheDestroyer;
+                                }
+                            }
+                        }
+                        return MNK.Rockbreaker;
+                    }
+
+
+                    if (SearchBuffArray(MNK.Raptor) && level >= 45) {
+                        return MNK.FourPointFury;
+                    } else if (SearchBuffArray(MNK.Coeurl) || SearchBuffArray(MNK.AnyForm) && level >= 30) {
+                        return MNK.Rockbreaker;
+                    }
+                    return MNK.ArmOfTheDestroyer;
+                }
+
+                // Todo account for firestarter. waiting until level 42 so i can grab the buff id
+                // and add this line: if (SearchBuffArray(BLM.BuffFirestarter))
+                if (actionID == BLM.Fire) {
+                    var gauge = JobGauges.Get<BLMGauge>();
+                    if ( (gauge.InAstralFire && !SearchBuffArray(BLM.BuffFirestarter) ) || level < 35) {
+                        if (gauge.ElementTimeRemaining < 6500 || SearchBuffArray(BLM.BuffSharpcast) || gauge.AstralFireStacks < 3 || level < 60) {
+                            return BLM.Fire;
+                        } else {
+                            return BLM.Fire4;
+                        }
+                    }
+                    return BLM.Fire3;
+                }
+                else if (actionID == BLM.Blizzard) {
+                    var gauge = JobGauges.Get<BLMGauge>();
+                    if (gauge.InUmbralIce || level < 35) {
+                        if (gauge.ElementTimeRemaining < 6500 || gauge.UmbralIceStacks < 3 || level < 58) {
+                            return BLM.Blizzard;
+                        } else {
+                            return BLM.Blizzard4;
+                        }
+                    }
+                    return BLM.Blizzard3;
+                }
+            }
 
             // B4 and F4 change to each other depending on stance, as do Flare and Freeze.
             if (Configuration.ComboPresets.HasFlag(CustomComboPreset.BlackEnochianFeature))
@@ -635,6 +756,7 @@ namespace XIVComboPlugin
                 }
 
             // MONK
+            /*
             if (Configuration.ComboPresets.HasFlag(CustomComboPreset.MonkFuryCombo))
             {
                 if (actionID == MNK.Bootshine || actionID == MNK.LeapingOpo)
@@ -667,7 +789,7 @@ namespace XIVComboPlugin
                         return MNK.PerfectBalance;
                     return iconHook.Original(self, actionID);
                 }
-            }
+            } */
 
             // RED MAGE
 
@@ -708,6 +830,13 @@ namespace XIVComboPlugin
             {
                 if (actionID == RDM.Verstone)
                 {
+                    if (level >= 70 && JobGauges.Get<RDMGauge>().ManaStacks == 3) {
+                        return RDM.Verholy;
+                    }
+                    if (level >= 10 && (SearchBuffArray(RDM.BuffSwiftcast) || SearchBuffArray(RDM.BuffDualcast) ||
+                        SearchBuffArray(RDM.BuffAcceleration) || SearchBuffArray(RDM.BuffChainspell))) {
+                            return RDM.Veraero;
+                        }
                     if (level >= 80 && (lastMove == RDM.Verflare || lastMove == RDM.Verholy)) return RDM.Scorch;
                     if (level >= 90 && lastMove == RDM.Scorch) return RDM.Resolution;
                     if (SearchBuffArray(RDM.BuffVerstoneReady)) return RDM.Verstone;
@@ -715,6 +844,14 @@ namespace XIVComboPlugin
                 }
                 if (actionID == RDM.Verfire)
                 {
+                    if (level >= 68 && JobGauges.Get<RDMGauge>().ManaStacks == 3) {
+                        return RDM.Verflare;
+                    }
+
+                    if (level >= 4 && (SearchBuffArray(RDM.BuffSwiftcast) || SearchBuffArray(RDM.BuffDualcast) ||
+                        SearchBuffArray(RDM.BuffAcceleration) || SearchBuffArray(RDM.BuffChainspell))) {
+                            return RDM.Verthunder;
+                        }
                     if (level >= 80 && (lastMove == RDM.Verflare || lastMove == RDM.Verholy)) return RDM.Scorch;
                     if (level >= 90 && lastMove == RDM.Scorch) return RDM.Resolution;
                     if (SearchBuffArray(RDM.BuffVerfireReady)) return RDM.Verfire;

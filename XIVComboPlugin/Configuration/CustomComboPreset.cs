@@ -211,6 +211,9 @@ namespace XIVComboPlugin
         
         [CustomComboInfo("Generational Legacy", "Legacy moves replace Generation moves when usable", 41)]
         ViperLegacyCombo = 1L << 51,
+        // CHEATER
+        [CustomComboInfo("Cheater Changes", "Replaces F1 with F3 in ice or on free F3 cast and vice versa", 43)]
+        CheaterChanges = 1L << 29,
     }
 
     public class CustomComboInfoAttribute : Attribute

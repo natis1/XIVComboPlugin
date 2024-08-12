@@ -33,7 +33,7 @@ namespace XIVComboPlugin
         private IconReplacer iconReplacer;
         private CustomComboPreset[] orderedByClassJob;
 
-        public XIVComboPlugin()
+        public XIVComboPlugin(IClientState clientState, ICommandManager commandManager, IDataManager manager, IDalamudPluginInterface pluginInterface, ISigScanner sigScanner, IJobGauges jobGauges, IChatGui chatGui, IGameInteropProvider gameInteropProvider, IPluginLog pluginLog, ICondition condition)
         {
             CommandManager.AddHandler("/pcombo", new CommandInfo(OnCommandDebugCombo)
             {
